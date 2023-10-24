@@ -8,3 +8,7 @@ body {
 
   overflow: hidden;
 }
+
+.p-listbox {
+  border: none;
+} 
