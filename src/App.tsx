@@ -3,6 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAppStore } from './store/app';
+import { useCatsStore } from './store/cats';
 
 import { Pages } from './constants';
 
@@ -18,6 +19,7 @@ const App = () => {
   const navigate = useNavigate();
 
   const { selectedPage } = useAppStore();
+  const { fetchAllCats } = useCatsStore();
 
   const [showSideBar, setShowSideBar] = useState(false);
 
@@ -35,6 +37,10 @@ const App = () => {
       setShowSideBar(false);
     }
   }, [selectedPage]);
+
+  useEffect(() => {
+    fetchAllCats();
+  }, []);
 
   return (
     <>

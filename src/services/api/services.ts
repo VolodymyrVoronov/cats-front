@@ -1,6 +1,8 @@
 import client from './axios-client';
 
-const fetchAllCats = () => client.get('/cats');
+import type { Cats } from '../../store/cats';
+
+const fetchAllCats = () => client.get<{ cats: Cats }>('/cats');
 const fetchCatByID = (id: string) => client.get(`/cats/${id}`);
 const createCat = (data: unknown) => client.post('/cat', data);
 const deleteCat = (id: string) => client.delete(`/cats/${id}`);
