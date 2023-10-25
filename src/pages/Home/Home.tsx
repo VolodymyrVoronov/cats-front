@@ -7,9 +7,9 @@ import PageWrapper from '../../components/layout/PageWrapper/PageWrapper';
 import styles from './Home.module.css';
 
 const Home = (): JSX.Element => {
-  const { cats, fetchingCats, errorFetchingCats } = useCatsStore();
+  const { fetchingCats, errorFetchingCats } = useCatsStore();
 
-  console.log(cats);
+  // console.log(cats);
 
   if (fetchingCats) {
     return <ProgressBar mode='indeterminate' style={{ height: '6px' }} />;
