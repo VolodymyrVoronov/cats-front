@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { motion } from 'framer-motion';
 import cn from 'classnames';
 

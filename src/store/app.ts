@@ -16,7 +16,7 @@ interface IAppStoreActions {
 }
 
 export const useAppStore = create(
-  immer<IAppStore & IAppStoreActions>((set, get) => ({
+  immer<IAppStore & IAppStoreActions>((set) => ({
     selectedPage: {
       name: 'Home',
       code: Pages.Home,

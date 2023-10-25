@@ -27,6 +27,8 @@ module.exports = {
     '@typescript-eslint/restrict-template-expressions': 1,
   },
 
+  ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts'],
+
   overrides: [
     // Configuration for TypeScript files
     {
