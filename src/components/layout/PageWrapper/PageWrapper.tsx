@@ -2,16 +2,16 @@ import { PropsWithChildren } from 'react';
 import { motion } from 'framer-motion';
 import cn from 'classnames';
 
-import styles from './PageLayout.module.css';
+import styles from './PageWrapper.module.css';
 
-interface IPageLayoutProps {
+interface IPageWrapperProps {
   className?: string;
 }
 
-const PageLayout = ({
+const PageWrapper = ({
   className,
   children,
-}: PropsWithChildren<IPageLayoutProps>) => {
+}: PropsWithChildren<IPageWrapperProps>) => {
   return (
     <motion.div
       className={cn(styles.root, className)}
@@ -44,4 +44,4 @@ const PageLayout = ({
   );
 };
 
-export default PageLayout;
+export default PageWrapper;

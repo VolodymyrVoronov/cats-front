@@ -1,9 +1,9 @@
-import PageLayout from '../../components/layout/PageLayout/PageLayout';
+import PageWrapper from '../../components/layout/PageWrapper/PageWrapper';
 
 import styles from './Add.module.css';
 
 const Add = (): JSX.Element => {
-  return <PageLayout className={styles.root}>Add</PageLayout>;
+  return <PageWrapper className={styles.root}>Add</PageWrapper>;
 };
 
 export default Add;
