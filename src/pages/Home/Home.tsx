@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 
 import { useCatsStore } from '../../store/cats';
@@ -7,7 +8,7 @@ import CatCard from '../../components/CatCard/CatCard';
 
 import styles from './Home.module.css';
 
-const Home = (): JSX.Element => {
+const Home = memo((): JSX.Element => {
   const {
     cats,
     fetchingCats,
@@ -41,6 +42,6 @@ const Home = (): JSX.Element => {
       ))}
     </PageWrapper>
   );
-};
+});
 
 export default Home;
