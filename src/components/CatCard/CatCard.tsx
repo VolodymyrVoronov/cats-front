@@ -61,7 +61,7 @@ const CatCard = ({
         <div className={styles.icons}>
           <IconIndicator
             icon={<FaHeart />}
-            tooltipText={marked ? 'Marked' : 'Unmarked'}
+            tooltipText={marked ? 'Selected' : 'Not selected'}
             flag={marked}
           />
 
