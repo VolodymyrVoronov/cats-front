@@ -5,12 +5,14 @@ import { Tooltip } from 'primereact/tooltip';
 
 interface IIconIndicatorProps {
   icon: ReactNode;
+  iconSize?: string;
   tooltipText?: string;
   flag: boolean;
 }
 
 const IconIndicator = ({
   icon,
+  iconSize = '2.5rem',
   tooltipText,
   flag,
 }: IIconIndicatorProps): JSX.Element => {
@@ -25,7 +27,7 @@ const IconIndicator = ({
         className={`${editedTooltipText} pi p-overlay-badge`}
         data-pr-tooltip={tooltipText}
         data-pr-position='bottom'
-        style={{ fontSize: '3rem', opacity: flag ? 1 : 0.5 }}
+        style={{ fontSize: iconSize, opacity: flag ? 1 : 0.5 }}
       >
         {icon}
         <Badge severity={flag ? 'success' : 'danger'}></Badge>

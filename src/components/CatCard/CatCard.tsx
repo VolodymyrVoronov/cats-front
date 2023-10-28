@@ -44,7 +44,10 @@ const CatCard = ({
   const header = (
     <div
       className={styles.header}
-      style={{ backgroundImage: `url(${photo})` }}
+      style={{
+        backgroundImage: `url(${photo})`,
+        filter: alive ? '' : 'grayscale(100%)',
+      }}
     />
   );
 
