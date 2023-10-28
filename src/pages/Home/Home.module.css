@@ -1,6 +1,26 @@
 .root {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-content: flex-start;
 
-  
+  gap: 20px;
+
+  overflow: auto;
+
+  padding-bottom: 70px;
+  padding-top: 5px;
+}
+
+@media screen and (min-width: 768px) {
+  .root {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+    padding-top: 0;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .root {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  }
 }

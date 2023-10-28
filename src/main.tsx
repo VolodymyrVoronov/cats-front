@@ -7,7 +7,7 @@ import App from './App.tsx';
 
 import './styles/global.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
-import 'primeflex/primeflex.css'; // css utility
+import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.css';
 

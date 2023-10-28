@@ -19,25 +19,31 @@ export interface Cat {
   dead: boolean;
 }
 
-export interface Cats {
-  cats: Cat[];
-}
-
 interface ICatsStore {
-  cats: Cats | [];
+  cats: Cat[] | [];
   fetchingCats: boolean;
   errorFetchingCats: string | null;
+
+  catToEdit: Cat | null;
+
+  showEditForm: boolean;
 }
 
 interface ICatsStoreActions {
   fetchAllCats: () => Promise<void>;
+  setCatToEdit: (catId: string) => void;
+  setShowEditForm: (show: boolean) => void;
 }
 
 export const useCatsStore = create(
-  immer<ICatsStore & ICatsStoreActions>((set) => ({
+  immer<ICatsStore & ICatsStoreActions>((set, get) => ({
     cats: [],
     fetchingCats: false,
     errorFetchingCats: null,
+
+    catToEdit: null,
+
+    showEditForm: false,
 
     fetchAllCats: async () => {
       const timeoutId = setTimeout(() => {
@@ -57,6 +63,16 @@ export const useCatsStore = create(
           set({ fetchingCats: false });
           clearTimeout(timeoutId);
         });
+    },
+
+    setCatToEdit: (catId) => {
+      const catToEdit = get().cats.find((cat) => cat.id === catId);
+
+      set({ catToEdit });
+    },
+
+    setShowEditForm: (show) => {
+      set({ showEditForm: show });
     },
   })),
 );

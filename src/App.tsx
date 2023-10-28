@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Sidebar } from 'primereact/sidebar';
 
 import { useAppStore } from './store/app';
 import { useCatsStore } from './store/cats';
@@ -19,7 +20,7 @@ const App = () => {
   const navigate = useNavigate();
 
   const { selectedPage } = useAppStore();
-  const { fetchAllCats } = useCatsStore();
+  const { showEditForm, fetchAllCats, setShowEditForm } = useCatsStore();
 
   const [showSideBar, setShowSideBar] = useState(false);
 
@@ -29,6 +30,10 @@ const App = () => {
 
   const onCloseSideBarButtonClick = (): void => {
     setShowSideBar(false);
+  };
+
+  const onCloseEditForm = () => {
+    setShowEditForm(false);
   };
 
   useEffect(() => {
@@ -49,6 +54,16 @@ const App = () => {
         showSideBar={showSideBar}
         onCloseSideBarButtonClick={onCloseSideBarButtonClick}
       />
+
+      <Sidebar visible={showEditForm} onHide={onCloseEditForm} fullScreen>
+        <h2>Sidebar</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat.
+        </p>
+      </Sidebar>
 
       <AnimatePresence mode='wait'>
         <Routes key={location.pathname} location={location}>
