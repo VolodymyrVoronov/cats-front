@@ -23,9 +23,7 @@ interface ICatsStore {
   cats: Cat[] | [];
   fetchingCats: boolean;
   errorFetchingCats: string | null;
-
   catToEdit: Cat | null;
-
   showEditForm: boolean;
 }
 
@@ -40,9 +38,7 @@ export const useCatsStore = create(
     cats: [],
     fetchingCats: false,
     errorFetchingCats: null,
-
     catToEdit: null,
-
     showEditForm: false,
 
     fetchAllCats: async () => {

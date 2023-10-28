@@ -3,7 +3,6 @@ import { ProgressBar } from 'primereact/progressbar';
 import { useCatsStore } from '../../store/cats';
 
 import PageWrapper from '../../components/layout/PageWrapper/PageWrapper';
-
 import CatCard from '../../components/CatCard/CatCard';
 
 import styles from './Home.module.css';
