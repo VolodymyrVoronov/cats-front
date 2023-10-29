@@ -1,3 +1,6 @@
 .root {
+  overflow: auto;
 
+  padding-bottom: 70px;
+  padding-top: 5px;
 }

@@ -8,7 +8,7 @@ export interface Cat {
   createdAt: Date;
   updatedAt: Date;
   name: string;
-  age: number;
+  age: number | null;
   breed: string;
   photo: string;
   diseases: string;
@@ -29,7 +29,7 @@ interface ICatsStore {
 
 interface ICatsStoreActions {
   fetchAllCats: () => Promise<void>;
-  setCatToEdit: (catId: string) => void;
+  setCatToEdit: (catId: string | null) => void;
   setShowEditForm: (show: boolean) => void;
 }
 
@@ -62,9 +62,13 @@ export const useCatsStore = create(
     },
 
     setCatToEdit: (catId) => {
-      const catToEdit = get().cats.find((cat) => cat.id === catId);
+      if (catId === null) {
+        set({ catToEdit: null });
+      } else {
+        const catToEdit = get().cats.find((cat) => cat.id === catId);
 
-      set({ catToEdit });
+        set({ catToEdit });
+      }
     },
 
     setShowEditForm: (show) => {

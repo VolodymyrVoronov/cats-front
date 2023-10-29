@@ -3,6 +3,7 @@ import { Badge } from 'primereact/badge';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { FaCat, FaBriefcaseMedical, FaHeart } from 'react-icons/fa';
+import { Image } from 'primereact/image';
 
 import type { Cat } from '../../store/cats';
 
@@ -23,8 +24,6 @@ const CatCard = ({
 }: ICatCardProps): JSX.Element => {
   const {
     id,
-    // createdAt,
-    // updatedAt,
     name,
     age,
     breed,
@@ -42,13 +41,19 @@ const CatCard = ({
   };
 
   const header = (
-    <div
-      className={styles.header}
-      style={{
-        backgroundImage: `url(${photo})`,
-        filter: alive ? '' : 'grayscale(100%)',
-      }}
-    />
+    <>
+      {photo ? (
+        <div
+          className={styles.header}
+          style={{
+            backgroundImage: `url(${photo})`,
+            filter: alive ? '' : 'grayscale(100%)',
+          }}
+        />
+      ) : (
+        <Image src='assets/black-cat.png' />
+      )}
+    </>
   );
 
   return (
@@ -57,6 +62,7 @@ const CatCard = ({
         title={`${name}. Age: ${age}`}
         header={header}
         subTitle={<i>{breed}</i>}
+        className='shadow-5'
       >
         <div className={styles.icons}>
           <IconIndicator

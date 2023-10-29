@@ -7,8 +7,16 @@ body {
   padding: 0;
 
   overflow: hidden;
+
+  background: #6366f1;
+  background: -webkit-linear-gradient(
+    0deg,
+    #6366f1 0%,
+    rgba(99, 102, 242, 0.1) 100%
+  );
+  background: linear-gradient(0deg, #6366f1 0%, rgba(99, 102, 242, 0.1) 100%);
 }
 
 .p-listbox {
   border: none;
-} 
+}

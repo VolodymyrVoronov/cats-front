@@ -14,6 +14,7 @@ import Selected from './pages/Selected/Selected';
 
 import SideMenu from './components/SideMenu/SideMenu';
 import TopMenu from './components/TopMenu/TopMenu';
+import Form from './components/Form/Form';
 
 import styles from './App.module.css';
 
@@ -22,7 +23,8 @@ const App = () => {
   const navigate = useNavigate();
 
   const { selectedPage } = useAppStore();
-  const { showEditForm, fetchAllCats, setShowEditForm } = useCatsStore();
+  const { showEditForm, fetchAllCats, setShowEditForm, setCatToEdit } =
+    useCatsStore();
 
   const [showSideBar, setShowSideBar] = useState(false);
 
@@ -43,6 +45,7 @@ const App = () => {
       navigate(selectedPage.code);
       setShowSideBar(false);
     }
+    setCatToEdit(null);
   }, [selectedPage]);
 
   useEffect(() => {
@@ -63,13 +66,7 @@ const App = () => {
         className={styles.dialog}
         draggable={false}
       >
-        <h2>Sidebar</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </p>
+        <Form wrapper='div' />
       </Dialog>
 
       <AnimatePresence mode='wait'>
