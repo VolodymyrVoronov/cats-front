@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import { Sidebar } from 'primereact/sidebar';
+import { Dialog } from 'primereact/dialog';
 
 import { useAppStore } from './store/app';
 import { useCatsStore } from './store/cats';
@@ -14,6 +14,8 @@ import Selected from './pages/Selected/Selected';
 
 import SideMenu from './components/SideMenu/SideMenu';
 import TopMenu from './components/TopMenu/TopMenu';
+
+import styles from './App.module.css';
 
 const App = () => {
   const location = useLocation();
@@ -55,7 +57,12 @@ const App = () => {
         onCloseSideBarButtonClick={onCloseSideBarButtonClick}
       />
 
-      <Sidebar visible={showEditForm} onHide={onCloseEditForm} fullScreen>
+      <Dialog
+        visible={showEditForm}
+        onHide={onCloseEditForm}
+        className={styles.dialog}
+        draggable={false}
+      >
         <h2>Sidebar</h2>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -63,7 +70,7 @@ const App = () => {
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
           aliquip ex ea commodo consequat.
         </p>
-      </Sidebar>
+      </Dialog>
 
       <AnimatePresence mode='wait'>
         <Routes key={location.pathname} location={location}>
