@@ -57,7 +57,15 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
     setCat({ ...cat, age: value });
   };
 
-  // console.log('cat', cat);
+  const onSaveImageClick = (image: string): void => {
+    setCat({ ...cat, photo: image });
+
+    setShowImageUploader(false);
+  };
+
+  const onDeletePhotoButtonClick = (): void => {
+    setCat({ ...cat, photo: '' });
+  };
 
   const onUploadPhotoButtonClick = (): void => {
     setShowImageUploader(true);
@@ -72,11 +80,11 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
       <Sidebar
         visible={showImageUploader}
         onHide={onCloseImageUploaderButtonClick}
-        className='p-sidebar-lg h-auto'
+        className='h-full z-1'
         position='top'
         dismissable={false}
       >
-        <ImageUploader />
+        <ImageUploader onSaveImageClick={onSaveImageClick} />
       </Sidebar>
 
       <div className='flex flex-column gap-2 mb-3'>
@@ -87,16 +95,27 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           }}
         />
 
-        <Button
-          onClick={onUploadPhotoButtonClick}
-          className='flex m-auto mt-3'
-          icon='pi pi-upload'
-          rounded
-          raised
-          aria-label='Upload new photo'
-          tooltip='Upload new photo'
-          tooltipOptions={{ position: 'top' }}
-        />
+        <span className='flex m-auto p-buttonset mt-3 mb-3'>
+          <Button
+            onClick={onUploadPhotoButtonClick}
+            icon='pi pi-upload'
+            rounded
+            raised
+            aria-label='Upload new photo'
+            tooltip='Upload new photo'
+            tooltipOptions={{ position: 'top' }}
+          />
+          <Button
+            onClick={onDeletePhotoButtonClick}
+            icon='pi pi-trash'
+            rounded
+            raised
+            aria-label='Delete uploaded photo'
+            tooltip='Delete uploaded photo'
+            tooltipOptions={{ position: 'top' }}
+            disabled={!cat.photo}
+          />
+        </span>
       </div>
 
       <div className='flex flex-column gap-2 mb-3'>
