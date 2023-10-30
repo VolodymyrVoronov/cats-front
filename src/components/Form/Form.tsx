@@ -7,12 +7,14 @@ import type { InputNumberChangeEvent } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
+import { Sidebar } from 'primereact/sidebar';
 
 import type { Cat } from '../../store/cats';
 import { useCatsStore } from '../../store/cats';
 // import { CatService } from '../../services/api/services';
 
 import styles from './Form.module.css';
+import ImageUploader from '../ImageUploader/ImageUploader';
 
 interface IFormProps {
   wrapper?: 'card' | 'div';
@@ -20,6 +22,8 @@ interface IFormProps {
 
 const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
   const { catToEdit } = useCatsStore();
+
+  const [showImageUploader, setShowImageUploader] = useState(false);
 
   const initialState =
     catToEdit !== null
@@ -56,11 +60,25 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
   // console.log('cat', cat);
 
   const onUploadPhotoButtonClick = (): void => {
-    // console.log('upload photo');
+    setShowImageUploader(true);
+  };
+
+  const onCloseImageUploaderButtonClick = (): void => {
+    setShowImageUploader(false);
   };
 
   const form = (
     <>
+      <Sidebar
+        visible={showImageUploader}
+        onHide={onCloseImageUploaderButtonClick}
+        className='p-sidebar-lg h-auto'
+        position='top'
+        dismissable={false}
+      >
+        <ImageUploader />
+      </Sidebar>
+
       <div className='flex flex-column gap-2 mb-3'>
         <div
           className={cn(styles.photo, 'shadow-5')}
@@ -68,6 +86,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
             backgroundImage: `url(${cat.photo || 'assets/black-cat.png'})`,
           }}
         />
+
         <Button
           onClick={onUploadPhotoButtonClick}
           className='flex m-auto mt-3'
@@ -107,6 +126,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           required
           useGrouping={false}
           showButtons
+          min={0}
         />
         <small id='age-help'>Enter cat's age. (0 if age is unknown)</small>
       </div>
