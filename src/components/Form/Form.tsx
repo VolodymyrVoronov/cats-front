@@ -339,7 +339,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           rounded
           raised
           size='large'
-          severity='success'
+          severity='help'
           disabled={!cat.name}
           tooltip={hasId ? 'Save changes' : 'Save'}
           tooltipOptions={{ position: 'top' }}

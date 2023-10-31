@@ -59,7 +59,14 @@ const CatCard = ({
   return (
     <div className={styles.root}>
       <Card
-        title={`${name}. Age: ${age}`}
+        title={
+          <span>
+            {name} <br />
+            <small className='font-medium text-mdd'>
+              Age: {age === 0 ? 'unknown' : age}
+            </small>
+          </span>
+        }
         header={header}
         subTitle={<i>{breed}</i>}
         className='shadow-5'
