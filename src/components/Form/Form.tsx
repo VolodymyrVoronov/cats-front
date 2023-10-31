@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from 'primereact/card';
 import cn from 'classnames';
 import { InputText } from 'primereact/inputtext';
@@ -7,21 +8,33 @@ import type { InputNumberChangeEvent } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
+import type { SelectButtonChangeEvent } from 'primereact/selectbutton';
+import { SelectButton } from 'primereact/selectbutton';
 import { Sidebar } from 'primereact/sidebar';
+import { Fieldset } from 'primereact/fieldset';
 
 import type { Cat } from '../../store/cats';
+import { useAppStore } from '../../store/app';
 import { useCatsStore } from '../../store/cats';
-// import { CatService } from '../../services/api/services';
+import { CatService } from '../../services/api/services';
+
+import { Pages } from '../../constants';
+
+import ImageUploader from '../ImageUploader/ImageUploader';
 
 import styles from './Form.module.css';
-import ImageUploader from '../ImageUploader/ImageUploader';
 
 interface IFormProps {
   wrapper?: 'card' | 'div';
 }
 
+type SelectButtonType = 'marked' | 'insurance' | 'alive';
+
 const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
-  const { catToEdit } = useCatsStore();
+  const navigate = useNavigate();
+
+  const { setShowEditForm } = useAppStore();
+  const { catToEdit, fetchAllCats } = useCatsStore();
 
   const [showImageUploader, setShowImageUploader] = useState(false);
 
@@ -30,7 +43,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
       ? { ...catToEdit }
       : ({
           name: '',
-          age: null,
+          age: 0,
           breed: '',
           photo: '',
           diseases: '',
@@ -42,6 +55,8 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
         } as Cat);
 
   const [cat, setCat] = useState(initialState);
+
+  const hasId = !!cat.id;
 
   const onTextInputChange = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
@@ -55,6 +70,29 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
     const { value } = e;
 
     setCat({ ...cat, age: value });
+  };
+
+  const onSelectButtonChange = (
+    e: SelectButtonChangeEvent,
+    type: SelectButtonType,
+  ): void => {
+    const { value } = e;
+
+    if (type === 'marked') {
+      setCat({ ...cat, marked: value });
+    }
+
+    if (type === 'insurance') {
+      setCat({ ...cat, insurance: value });
+    }
+
+    if (type === 'alive') {
+      if (value) {
+        setCat({ ...cat, dead: false, alive: true });
+      } else {
+        setCat({ ...cat, dead: true, alive: false });
+      }
+    }
   };
 
   const onSaveImageClick = (image: string): void => {
@@ -73,6 +111,38 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
 
   const onCloseImageUploaderButtonClick = (): void => {
     setShowImageUploader(false);
+  };
+
+  const onSaveButtonClick = async (): Promise<void> => {
+    if (hasId) {
+      const res = await CatService.updateCat(cat.id, cat);
+
+      if (res.status === 200) {
+        fetchAllCats();
+
+        if (wrapper === 'card') {
+          navigate(Pages.Home);
+        } else {
+          setShowEditForm(false);
+        }
+      }
+    } else {
+      const res = await CatService.createCat(cat);
+
+      if (res.status === 201) {
+        fetchAllCats();
+
+        if (wrapper === 'card') {
+          navigate(Pages.Home);
+        } else {
+          setShowEditForm(false);
+        }
+      }
+    }
+  };
+
+  const onClearButtonClick = (): void => {
+    setCat(initialState);
   };
 
   const form = (
@@ -120,7 +190,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
 
       <div className='flex flex-column gap-2 mb-3'>
         <label htmlFor='name' className='font-bold'>
-          Name
+          Name*
         </label>
         <InputText
           value={cat.name}
@@ -130,7 +200,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           aria-describedby='name-help'
           required
         />
-        <small id='name-help'>Enter cat's name.</small>
+        <small id='name-help'>Enter cat's name. (*required)</small>
       </div>
 
       <div className='flex flex-column gap-2 mb-3'>
@@ -182,7 +252,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
         </small>
       </div>
 
-      <div className='flex flex-column gap-2 mb-3'>
+      <div className='flex flex-column gap-2 mb-6'>
         <label htmlFor='information' className='font-bold'>
           Information
         </label>
@@ -199,6 +269,82 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           Enter cat's information. (If no information leave blank)
         </small>
       </div>
+
+      <Fieldset legend='Short information' className='mb-6'>
+        <div className={styles.toggles}>
+          <SelectButton
+            value={cat.marked}
+            onChange={(e) => {
+              onSelectButtonChange(e, 'marked');
+            }}
+            options={[
+              { label: 'Marked', value: true },
+              { label: 'Not marked', value: false },
+            ]}
+            name='marked'
+            tooltip='Is cat marked?'
+            tooltipOptions={{ position: 'top' }}
+            allowEmpty={false}
+          />
+
+          <SelectButton
+            value={cat.insurance}
+            onChange={(e) => {
+              onSelectButtonChange(e, 'insurance');
+            }}
+            options={[
+              { label: 'Insurance', value: true },
+              { label: 'No insurance', value: false },
+            ]}
+            name='insurance'
+            tooltip='Does cat have insurance?'
+            tooltipOptions={{ position: 'top' }}
+            allowEmpty={false}
+          />
+
+          <SelectButton
+            value={cat.alive}
+            onChange={(e) => {
+              onSelectButtonChange(e, 'alive');
+            }}
+            options={[
+              { label: 'Alive', value: true },
+              { label: 'Dead', value: false },
+            ]}
+            name='alive'
+            tooltip='Is cat alive?'
+            tooltipOptions={{ position: 'top' }}
+            allowEmpty={false}
+          />
+        </div>
+      </Fieldset>
+
+      <span className='flex justify-content-center p-buttonset'>
+        <Button
+          onClick={onClearButtonClick}
+          label={hasId ? 'Reset changes' : 'Clear'}
+          icon='pi pi-trash'
+          rounded
+          raised
+          size='large'
+          severity='secondary'
+          tooltip={hasId ? 'Reset changes' : 'Clear'}
+          tooltipOptions={{ position: 'top' }}
+        />
+
+        <Button
+          onClick={onSaveButtonClick}
+          label={hasId ? 'Save changes' : 'Save'}
+          icon='pi pi-save'
+          rounded
+          raised
+          size='large'
+          severity='success'
+          disabled={!cat.name}
+          tooltip={hasId ? 'Save changes' : 'Save'}
+          tooltipOptions={{ position: 'top' }}
+        />
+      </span>
     </>
   );
 

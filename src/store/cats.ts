@@ -24,13 +24,11 @@ interface ICatsStore {
   fetchingCats: boolean;
   errorFetchingCats: string | null;
   catToEdit: Cat | null;
-  showEditForm: boolean;
 }
 
 interface ICatsStoreActions {
   fetchAllCats: () => Promise<void>;
   setCatToEdit: (catId: string | null) => void;
-  setShowEditForm: (show: boolean) => void;
 }
 
 export const useCatsStore = create(
@@ -39,7 +37,6 @@ export const useCatsStore = create(
     fetchingCats: false,
     errorFetchingCats: null,
     catToEdit: null,
-    showEditForm: false,
 
     fetchAllCats: async () => {
       const timeoutId = setTimeout(() => {
@@ -69,10 +66,6 @@ export const useCatsStore = create(
 
         set({ catToEdit });
       }
-    },
-
-    setShowEditForm: (show) => {
-      set({ showEditForm: show });
     },
   })),
 );

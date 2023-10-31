@@ -22,9 +22,8 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { selectedPage } = useAppStore();
-  const { showEditForm, fetchAllCats, setShowEditForm, setCatToEdit } =
-    useCatsStore();
+  const { selectedPage, showEditForm, setShowEditForm } = useAppStore();
+  const { fetchAllCats, setCatToEdit } = useCatsStore();
 
   const [showSideBar, setShowSideBar] = useState(false);
 

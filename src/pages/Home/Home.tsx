@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { ProgressBar } from 'primereact/progressbar';
 
 import { useCatsStore } from '../../store/cats';
+import { useAppStore } from '../../store/app';
 
 import PageWrapper from '../../components/layout/PageWrapper/PageWrapper';
 import CatCard from '../../components/CatCard/CatCard';
@@ -9,13 +10,9 @@ import CatCard from '../../components/CatCard/CatCard';
 import styles from './Home.module.css';
 
 const Home = memo((): JSX.Element => {
-  const {
-    cats,
-    fetchingCats,
-    errorFetchingCats,
-    setCatToEdit,
-    setShowEditForm,
-  } = useCatsStore();
+  const { setShowEditForm } = useAppStore();
+  const { cats, fetchingCats, errorFetchingCats, setCatToEdit } =
+    useCatsStore();
 
   if (fetchingCats) {
     return <ProgressBar mode='indeterminate' style={{ height: '6px' }} />;
