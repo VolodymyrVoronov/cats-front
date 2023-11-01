@@ -12,13 +12,18 @@ import type { SelectButtonChangeEvent } from 'primereact/selectbutton';
 import { SelectButton } from 'primereact/selectbutton';
 import { Sidebar } from 'primereact/sidebar';
 import { Fieldset } from 'primereact/fieldset';
+import type {
+  AutoCompleteChangeEvent,
+  AutoCompleteCompleteEvent,
+} from 'primereact/autocomplete';
+import { AutoComplete } from 'primereact/autocomplete';
 
 import type { Cat } from '../../store/cats';
 import { useAppStore } from '../../store/app';
 import { useCatsStore } from '../../store/cats';
 import { CatService } from '../../services/api/services';
 
-import { Pages } from '../../constants';
+import { catBreeds, pages } from '../../constants';
 
 import ImageUploader from '../ImageUploader/ImageUploader';
 
@@ -55,15 +60,30 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
         } as Cat);
 
   const [cat, setCat] = useState(initialState);
+  const [breeds, setBreeds] = useState<string[]>([]);
+  const [updating, setUpdating] = useState(false);
 
   const hasId = !!cat.id;
 
   const onTextInputChange = (
-    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>,
+    e:
+      | ChangeEvent<HTMLInputElement>
+      | ChangeEvent<HTMLTextAreaElement>
+      | AutoCompleteChangeEvent,
   ): void => {
     const { name, value } = e.target;
 
     setCat({ ...cat, [name]: value });
+  };
+
+  const onSearchInputChange = (e: AutoCompleteCompleteEvent) => {
+    const { query } = e;
+
+    setBreeds([
+      ...catBreeds.filter((breed) =>
+        breed.toLowerCase().includes(query.toLowerCase()),
+      ),
+    ]);
   };
 
   const onNumberInputChange = (e: InputNumberChangeEvent): void => {
@@ -114,29 +134,35 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
   };
 
   const onSaveButtonClick = async (): Promise<void> => {
+    setUpdating(true);
+
     if (hasId) {
       const res = await CatService.updateCat(cat.id, cat);
 
       if (res.status === 200) {
+        setUpdating(false);
         fetchAllCats();
 
-        if (wrapper === 'card') {
-          navigate(Pages.Home);
-        } else {
+        if (wrapper === 'div') {
           setShowEditForm(false);
         }
+      } else {
+        setUpdating(false);
       }
     } else {
       const res = await CatService.createCat(cat);
 
-      if (res.status === 201) {
+      if (res.status === 200) {
+        setUpdating(false);
         fetchAllCats();
 
         if (wrapper === 'card') {
-          navigate(Pages.Home);
+          navigate(pages.Home);
         } else {
           setShowEditForm(false);
         }
+      } else {
+        setUpdating(false);
       }
     }
   };
@@ -180,8 +206,8 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
             icon='pi pi-trash'
             rounded
             raised
-            aria-label='Delete uploaded photo'
-            tooltip='Delete uploaded photo'
+            aria-label='Delete photo'
+            tooltip='Delete photo'
             tooltipOptions={{ position: 'top' }}
             disabled={!cat.photo}
           />
@@ -190,7 +216,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
 
       <div className='flex flex-column gap-2 mb-3'>
         <label htmlFor='name' className='font-bold'>
-          Name*
+          Name<span className='text-red-500'>*</span>
         </label>
         <InputText
           value={cat.name}
@@ -200,7 +226,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           aria-describedby='name-help'
           required
         />
-        <small id='name-help'>Enter cat's name. (*required)</small>
+        <small id='name-help'>Enter cat's name.</small>
       </div>
 
       <div className='flex flex-column gap-2 mb-3'>
@@ -224,12 +250,16 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
         <label htmlFor='breed' className='font-bold'>
           Breed
         </label>
-        <InputText
+        <AutoComplete
           value={cat.breed}
+          suggestions={breeds}
+          completeMethod={onSearchInputChange}
           onChange={onTextInputChange}
           name='breed'
           id='breed'
           aria-describedby='breed-help'
+          dropdown
+          type='text'
         />
         <small id='breed-help'>
           Enter cat's breed. (If unknown leave blank)
@@ -270,7 +300,7 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
         </small>
       </div>
 
-      <Fieldset legend='Short information' className='mb-6'>
+      <Fieldset legend='Short information' className='mb-3'>
         <div className={styles.toggles}>
           <SelectButton
             value={cat.marked}
@@ -319,6 +349,12 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
         </div>
       </Fieldset>
 
+      <span className='flex mb-6'>
+        (Fields marked with{' '}
+        <span className='font-bold text-red-500'>&nbsp;*&nbsp;</span> are
+        required)
+      </span>
+
       <span className='flex justify-content-center p-buttonset'>
         <Button
           onClick={onClearButtonClick}
@@ -327,22 +363,24 @@ const Form = ({ wrapper = 'card' }: IFormProps): JSX.Element => {
           rounded
           raised
           size='large'
-          severity='secondary'
           tooltip={hasId ? 'Reset changes' : 'Clear'}
           tooltipOptions={{ position: 'top' }}
+          disabled={updating}
         />
 
         <Button
           onClick={onSaveButtonClick}
-          label={hasId ? 'Save changes' : 'Save'}
+          label={
+            hasId ? `${updating ? 'Saving changes' : 'Save changes'}` : 'Save'
+          }
           icon='pi pi-save'
           rounded
           raised
           size='large'
-          severity='help'
           disabled={!cat.name}
           tooltip={hasId ? 'Save changes' : 'Save'}
           tooltipOptions={{ position: 'top' }}
+          loading={updating}
         />
       </span>
     </>

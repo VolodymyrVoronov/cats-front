@@ -2,15 +2,15 @@ import { ListBox } from 'primereact/listbox';
 
 import { useAppStore } from '../../store/app';
 
-import { Pages } from '../../constants';
+import { pages } from '../../constants';
 
 const SideMenuList = (): JSX.Element => {
   const { setSelectedPage } = useAppStore();
 
   const menuItems = [
-    { name: 'Home', code: Pages.Home, icon: 'pi-home' },
-    { name: 'Add', code: Pages.Add, icon: 'pi-plus' },
-    { name: 'Selected', code: Pages.Selected, icon: 'pi-heart' },
+    { name: 'Home', code: pages.Home, icon: 'pi-home' },
+    { name: 'Add', code: pages.Add, icon: 'pi-plus' },
+    { name: 'Selected', code: pages.Selected, icon: 'pi-heart' },
   ];
 
   const menuItemsTemplate = (option: { name: string; icon: string }) => {

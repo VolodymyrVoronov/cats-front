@@ -6,7 +6,7 @@ import { Dialog } from 'primereact/dialog';
 import { useAppStore } from './store/app';
 import { useCatsStore } from './store/cats';
 
-import { Pages } from './constants';
+import { pages } from './constants';
 
 import Home from './pages/Home/Home';
 import Add from './pages/Add/Add';
@@ -70,9 +70,9 @@ const App = () => {
 
       <AnimatePresence mode='wait'>
         <Routes key={location.pathname} location={location}>
-          <Route path={Pages.Home} element={<Home />} />
-          <Route path={Pages.Add} element={<Add />} />
-          <Route path={Pages.Selected} element={<Selected />} />
+          <Route path={pages.Home} element={<Home />} />
+          <Route path={pages.Add} element={<Add />} />
+          <Route path={pages.Selected} element={<Selected />} />
         </Routes>
       </AnimatePresence>
     </>

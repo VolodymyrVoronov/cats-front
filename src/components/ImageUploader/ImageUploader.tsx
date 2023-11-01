@@ -83,6 +83,7 @@ const ImageUploader = ({
           icon='pi pi-upload'
           size='small'
           rounded
+          aria-label='Upload new photo'
           tooltip='Upload new photo'
           tooltipOptions={{ position: 'top' }}
           disabled={loading}
@@ -102,7 +103,8 @@ const ImageUploader = ({
           icon='pi pi-trash'
           size='small'
           rounded
-          tooltip='Delete current photo'
+          aria-label='Delete uploaded photo'
+          tooltip='Delete uploaded photo'
           tooltipOptions={{ position: 'top' }}
         />
         <Button
@@ -112,6 +114,7 @@ const ImageUploader = ({
           icon='pi pi-save'
           size='small'
           rounded
+          aria-label='Save photo'
           tooltip='Save photo'
           tooltipOptions={{ position: 'top' }}
         />

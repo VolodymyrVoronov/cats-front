@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-import { Pages } from '../constants';
+import { pages } from '../constants';
 
 interface IAppStore {
   selectedPage: {
@@ -21,7 +21,7 @@ export const useAppStore = create(
   immer<IAppStore & IAppStoreActions>((set) => ({
     selectedPage: {
       name: 'Home',
-      code: Pages.Home,
+      code: pages.Home,
       icon: 'pi-home',
     },
     showEditForm: false,

@@ -21,13 +21,19 @@ export interface Cat {
 
 interface ICatsStore {
   cats: Cat[] | [];
+
   fetchingCats: boolean;
   errorFetchingCats: string | null;
+
+  deletingCat: boolean;
+  errorDeletingCat: string | null;
+
   catToEdit: Cat | null;
 }
 
 interface ICatsStoreActions {
   fetchAllCats: () => Promise<void>;
+  deleteCat: (catId: string) => Promise<void>;
   setCatToEdit: (catId: string | null) => void;
 }
 
@@ -36,6 +42,8 @@ export const useCatsStore = create(
     cats: [],
     fetchingCats: false,
     errorFetchingCats: null,
+    deletingCat: false,
+    errorDeletingCat: null,
     catToEdit: null,
 
     fetchAllCats: async () => {
@@ -54,6 +62,31 @@ export const useCatsStore = create(
         })
         .finally(() => {
           set({ fetchingCats: false });
+          set({ errorFetchingCats: null });
+          clearTimeout(timeoutId);
+        });
+    },
+
+    deleteCat: async (catId) => {
+      const timeoutId = setTimeout(() => {
+        set({ deletingCat: true });
+      }, 2000);
+
+      await CatService.deleteCat(catId)
+        .then((res) => {
+          if (res.status === 200) {
+            set({ deletingCat: false });
+
+            get().fetchAllCats();
+          }
+        })
+        .catch((err) => {
+          set({ deletingCat: false });
+          set({ errorDeletingCat: err.message });
+        })
+        .finally(() => {
+          set({ deletingCat: false });
+          set({ errorDeletingCat: null });
           clearTimeout(timeoutId);
         });
     },
