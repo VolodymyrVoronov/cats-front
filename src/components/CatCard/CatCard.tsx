@@ -13,10 +13,10 @@ import styles from './CatCard.module.css';
 
 interface ICatCardProps {
   cat: Cat;
-  fetchingCats: boolean;
-  deletingCat: boolean;
-  onEditCardClick: (id: string) => void;
-  onDeleteCardClick: (id: string) => void;
+  fetchingCats?: boolean;
+  deletingCat?: boolean;
+  onEditCardClick?: (id: string) => void;
+  onDeleteCardClick?: (id: string) => void;
 }
 
 const CatCard = ({
@@ -40,12 +40,18 @@ const CatCard = ({
     dead,
   } = cat;
 
+  const anyActions = onEditCardClick || onDeleteCardClick;
+
   const onEditButtonClick = (): void => {
-    onEditCardClick(id);
+    if (onEditCardClick) {
+      onEditCardClick(id);
+    }
   };
 
   const onDeleteButtonClick = (): void => {
-    onDeleteCardClick(id);
+    if (onDeleteCardClick) {
+      onDeleteCardClick(id);
+    }
   };
 
   const header = (
@@ -115,36 +121,40 @@ const CatCard = ({
           </p>
         )}
 
-        <Divider />
+        {anyActions && (
+          <>
+            <Divider />
 
-        <span className='flex justify-content-center p-buttonset'>
-          <Button
-            onClick={onEditButtonClick}
-            label='Edit'
-            icon='pi pi-pencil'
-            size='small'
-            rounded
-            raised
-            outlined
-            tooltip="Edit cat's card"
-            tooltipOptions={{ position: 'top' }}
-            loading={fetchingCats || deletingCat}
-          />
+            <span className='flex justify-content-center p-buttonset'>
+              <Button
+                onClick={onEditButtonClick}
+                label='Edit'
+                icon='pi pi-pencil'
+                size='small'
+                rounded
+                raised
+                outlined
+                tooltip="Edit cat's card"
+                tooltipOptions={{ position: 'top' }}
+                loading={fetchingCats || deletingCat}
+              />
 
-          <Button
-            onClick={onDeleteButtonClick}
-            className='p-button-danger'
-            label='Delete'
-            icon='pi pi-trash'
-            size='small'
-            rounded
-            raised
-            outlined
-            tooltip="Delete cat's card"
-            tooltipOptions={{ position: 'top' }}
-            loading={fetchingCats || deletingCat}
-          />
-        </span>
+              <Button
+                onClick={onDeleteButtonClick}
+                className='p-button-danger'
+                label='Delete'
+                icon='pi pi-trash'
+                size='small'
+                rounded
+                raised
+                outlined
+                tooltip="Delete cat's card"
+                tooltipOptions={{ position: 'top' }}
+                loading={fetchingCats || deletingCat}
+              />
+            </span>
+          </>
+        )}
       </Card>
     </div>
   );

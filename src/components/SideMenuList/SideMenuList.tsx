@@ -1,16 +1,24 @@
 import { ListBox } from 'primereact/listbox';
 
 import { useAppStore } from '../../store/app';
+import { useCatsStore } from '../../store/cats';
 
 import { pages } from '../../constants';
 
 const SideMenuList = (): JSX.Element => {
   const { setSelectedPage } = useAppStore();
+  const { cats } = useCatsStore();
+
+  const anyMarkedCats = cats.some((cat) => cat.marked);
 
   const menuItems = [
     { name: 'Home', code: pages.Home, icon: 'pi-home' },
     { name: 'Add', code: pages.Add, icon: 'pi-plus' },
-    { name: 'Selected', code: pages.Selected, icon: 'pi-heart' },
+    {
+      name: 'Selected',
+      code: pages.Selected,
+      icon: `${anyMarkedCats ? 'pi-heart-fill' : 'pi-heart'}`,
+    },
   ];
 
   const menuItemsTemplate = (option: { name: string; icon: string }) => {

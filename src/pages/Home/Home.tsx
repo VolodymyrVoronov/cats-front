@@ -71,6 +71,7 @@ const Home = memo((): JSX.Element => {
     <>
       <ConfirmDialog />
       <Toast ref={toast} />
+
       <PageWrapper className={styles.root}>
         {cats.map((cat) => (
           <CatCard
